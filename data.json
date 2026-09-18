@@ -1,0 +1,15 @@
+{
+  "temperature": "--",
+  "departures": [
+    {
+      "line": "S25",
+      "destination": "TELTOW STADT",
+      "countdown": "-- MIN"
+    },
+    {
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ",
+      "countdown": "-- MIN"
+    }
+  ]
+}
