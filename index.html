@@ -1,90 +1,139 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050505">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tegel Abfahrtsanzeige</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
-body{font-family:Arial,Helvetica,sans-serif;color:#ffad18}
-.board{width:100vw;height:100vh;background:#050505;display:flex;flex-direction:column;position:relative}
-.top{height:15%;min-height:70px;display:grid;grid-template-columns:20% 55% 25%;align-items:center;padding:0 3.5%;border-bottom:2px solid #ffad18}
-.top>div,.row,.message,.info{color:#ffad18;font-family:"Courier New",monospace;font-weight:900;text-shadow:0 0 5px #ff8c00,0 0 12px rgba(255,126,0,.65)}
-.top>div{font-size:clamp(28px,4vw,64px);white-space:nowrap}.top .right{text-align:right}
-.screen{flex:1;position:relative;overflow:hidden;padding:1.2% 2.2% 6%}
-.screen:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;background-image:radial-gradient(circle,rgba(255,174,30,.5) 0 1px,transparent 1.3px);background-size:5px 5px;mix-blend-mode:screen}
-.rows{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-evenly}
-.row{display:grid;grid-template-columns:18% 58% 24%;align-items:center;height:13%;min-height:42px;letter-spacing:.02em}
-.line{font-size:clamp(21px,3.2vw,55px);white-space:nowrap}.dest{font-size:clamp(20px,3.05vw,52px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.count{text-align:right;font-size:clamp(22px,3.15vw,55px);white-space:nowrap}.badge{display:inline-block;min-width:3.1em}
-.message{font-size:clamp(19px,2.6vw,44px);text-align:center}
-.info{position:absolute;z-index:3;left:2.5%;right:2.5%;bottom:1.5%;display:flex;gap:2.2vw;align-items:center;font-size:clamp(17px,2.25vw,38px)}
-.weather,.quote{white-space:nowrap}.quote{flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis}
-.fs{position:fixed;z-index:20;right:8px;bottom:8px;width:32px;height:28px;padding:0;border:1px solid #ffad18;background:#050505;color:#ffad18;border-radius:2px;cursor:pointer;font:900 20px/25px Arial,sans-serif;text-shadow:0 0 4px #ff8c00}
-@media(max-width:700px){.top{grid-template-columns:25% 45% 30%;padding:0 2%;height:14%}.screen{padding:2% 1.5% 8%}.row{grid-template-columns:20% 55% 25%}.top>div{font-size:clamp(18px,5vw,34px)}.line{font-size:clamp(14px,4.4vw,27px)}.dest{font-size:clamp(13px,4vw,25px)}.count{font-size:clamp(15px,4.2vw,27px)}.info{left:2%;right:5%;font-size:clamp(11px,3.3vw,21px);gap:2vw}.fs{width:28px;height:25px;font-size:17px;line-height:22px}}
+html,body{margin:0;width:100%;height:100%;background:#050505;color:#ffad18;overflow:hidden}
+body{font-family:"Courier New",monospace;font-weight:bold}
+#board{width:100%;height:100%;display:flex;flex-direction:column}
+#head{height:15%;display:grid;grid-template-columns:20% 55% 25%;align-items:center;border-bottom:2px solid #ffad18;padding:0 3%;font-size:28px}
+.right{text-align:right}
+#rows{flex:1;display:flex;flex-direction:column;justify-content:space-around;padding:2%}
+.row{display:grid;grid-template-columns:20% 55% 25%;font-size:27px}
+.count{text-align:right}
+#info{height:8%;display:flex;align-items:center;gap:20px;padding:0 3%;font-size:18px}
+#quote{flex:1;text-align:center;white-space:nowrap;overflow:hidden}
+#fs{position:fixed;right:8px;bottom:8px;background:#050505;color:#ffad18;border:1px solid #ffad18;font-size:20px}
 </style>
 </head>
-<body>
-<div class="board">
-  <div class="top"><div>LINIE</div><div>ZIEL</div><div class="right">ABFAHRT IN</div></div>
-  <div class="screen"><div class="rows" id="rows"></div></div>
-  <div class="info"><span id="clock">--:--:--</span><span class="weather" id="weather">☁︎ --°C</span><span class="quote" id="quote">„Jeder Weg beginnt mit dem ersten Schritt.“</span></div>
-  <button class="fs" id="fs" aria-label="Vollbild" title="Vollbild">⛶</button>
-</div>
-<script>
-const API="https://v6.vbb.transport.rest";
-const S_TEGEL="900089303", U_ALT_TEGEL="900089301";
-let departures=[];
-const $=id=>document.getElementById(id);
-function dep(x){return x.when||x.plannedWhen||x.scheduledWhen||x.arrival||x.departure}
-function ts(x){const v=dep(x);if(!v)return NaN;const n=Date.parse(v);return Number.isFinite(n)?n:NaN}
-function future(x){const t=ts(x);return Number.isFinite(t)&&t>=Date.now()-30000}
-function mins(x){return Math.max(0,Math.floor((ts(x)-Date.now()+30000)/60000))}
-function text(x){return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()}
-function direction(x){return text(x.direction||x.destination?.name||x.destination||x.to||"")}
-function lineName(x){return text(x.line?.name||x.line?.id||x.line?.label||"")}
-function allText(x){try{return JSON.stringify(x||{}).toLowerCase();}catch(e){return "";}}
-function isS25(x){const ln=lineName(x),dir=direction(x),t=allText(x);return /^s25\b/i.test(ln)&&(/teltow\s*stadt/i.test(dir)||/teltow\s*stadt/i.test(t));}
-function isReplacement(x){const t=allText(x),dir=direction(x);return /kurt\s*[-]?\s*schumacher\s*[-]?\s*platz/i.test(dir)||/kurt[- ]?schumacher[- ]?platz/i.test(t)||(/ersatzverkehr|sev/i.test(t)&&/u6/i.test(t));}
-function sortTime(a,b){return ts(a)-ts(b)}
-function updateClock(){ $("clock").textContent=new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"}); }
-updateClock();setInterval(updateClock,1000);
 
-async function getJson(url){
-  try{const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json();}
-  catch(e){
-    const proxy="https://api.allorigins.win/get?url="+encodeURIComponent(url);
-    const r=await fetch(proxy,{cache:"no-store"});if(!r.ok)throw new Error("proxy HTTP "+r.status);
-    const j=await r.json();if(!j.contents)throw new Error("proxy empty");
-    return JSON.parse(j.contents);
+<body>
+<div id="board">
+
+<div id="head">
+<div>LINIE</div>
+<div>ZIEL</div>
+<div class="right">ABFAHRT IN</div>
+</div>
+
+<div id="rows">
+<div class="row"><div>--</div><div>LIVE DATEN</div><div class="count">--</div></div>
+<div class="row"><div>--</div><div></div><div class="count">--</div></div>
+<div class="row"><div>--</div><div></div><div class="count">--</div></div>
+<div class="row"><div>--</div><div></div><div class="count">--</div></div>
+<div class="row"><div>--</div><div></div><div class="count">--</div></div>
+</div>
+
+<div id="info">
+<span id="clock">--:--</span>
+<span id="weather">--°C</span>
+<span id="quote">„Jeder Weg beginnt mit dem ersten Schritt.“</span>
+</div>
+
+<button id="fs">⛶</button>
+
+</div>
+
+<script>
+var dataUrl="data.json";
+
+function loadData(){
+  var x=new XMLHttpRequest();
+
+  x.open("GET",dataUrl+"?t="+new Date().getTime(),true);
+
+  x.onreadystatechange=function(){
+    if(x.readyState===4){
+      if(x.status===200){
+        try{
+          var d=JSON.parse(x.responseText);
+          showData(d);
+        }catch(e){
+          showError();
+        }
+      }else{
+        showError();
+      }
+    }
+  };
+
+  x.send(null);
+}
+
+function showData(d){
+  var rows=document.getElementById("rows");
+  var list=d.departures||[];
+
+  if(list.length===0){
+    showError();
+    return;
+  }
+
+  var html="";
+
+  for(var i=0;i<5;i++){
+    if(list[i]){
+      html+='<div class="row">';
+      html+='<div>'+list[i].line+'</div>';
+      html+='<div>'+list[i].destination+'</div>';
+      html+='<div class="count">'+list[i].countdown+'</div>';
+      html+='</div>';
+    }else{
+      html+='<div class="row"><div></div><div></div><div></div></div>';
+    }
+  }
+
+  rows.innerHTML=html;
+
+  if(d.temperature){
+    document.getElementById("weather").innerHTML=d.temperature+"°C";
   }
 }
-async function updateWeather(){try{const url="https://api.open-meteo.com/v1/forecast?latitude=52.56&longitude=13.29&current=temperature_2m,weather_code&timezone=Europe%2FBerlin&_="+Date.now();const d=await getJson(url),c=Number(d.current.weather_code);let icon="SONNE";if(c>=1&&c<=3)icon="WOLKE";else if(c>=51&&c<=67)icon="REGEN";else if(c>=71&&c<=77)icon="SCHNEE";else if(c>=80)icon="REGEN";$("weather").textContent=`${icon} ${Math.round(Number(d.current.temperature_2m))}°C`;}catch(e){$("weather").textContent="WETTER --°C";}}
-updateWeather();setInterval(updateWeather,600000);
 
-const quotes=["„Jeder Weg beginnt mit dem ersten Schritt.“","„Der nächste Schritt bringt dich weiter.“","„Neue Wege, neue Möglichkeiten.“","„Manchmal ist der Weg das Ziel.“","„Heute ist ein guter Tag für einen neuen Weg.“","„Gute Reise!“","„Jeder Tag ist eine neue Reise.“"];
-let quoteKey="";
-function localDateKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
-function updateQuote(){const key=localDateKey();if(key!==quoteKey){quoteKey=key;const parts=key.split("-").map(Number);const dayNumber=Math.floor((Date.UTC(parts[0],parts[1]-1,parts[2])-Date.UTC(2026,0,1))/86400000);$("quote").textContent=quotes[((dayNumber%quotes.length)+quotes.length)%quotes.length];}}
-updateQuote();setInterval(updateQuote,1000);
-
-function render(){const list=departures.filter(future).sort(sortTime).slice(0,7);$("rows").innerHTML=list.length?list.map(x=>{const bus=x.kind==="u6";return `<div class="row"><div class="line"><span class="badge">${bus?"U6":"S25"}</span></div><div class="dest">${bus?"KURT-SCHUMACHER-PLATZ":"TELTOW STADT"}</div><div class="count">${mins(x)<=0?"JETZT":mins(x)+" MIN"}</div></div>`}).join(""):`<div class="message">LIVE-DATEN NICHT VERFÜGBAR</div>`;}
-
-async function getDepartures(stop){
- const path=`/stops/${stop}/departures?duration=180&results=100&remarks=true&language=de`;
- const url="https://v6.vbb.transport.rest"+path+"&_="+Date.now();
- const data=await getJson(url);
- return Array.isArray(data)?data:(Array.isArray(data.departures)?data.departures:[]);
+function showError(){
+  document.getElementById("rows").innerHTML=
+  '<div class="row"><div></div><div>LIVE-DATEN NICHT VERFÜGBAR</div><div></div></div>';
 }
-async function refresh(){try{
- const [s,b]=await Promise.all([getDepartures(S_TEGEL),getDepartures(U_ALT_TEGEL)]);
- const ss=s.filter(isS25).map(x=>({...x,kind:"s25"}));
- const bb=b.filter(isReplacement).map(x=>({...x,kind:"u6"}));
- departures=[...ss,...bb].filter(future).sort(sortTime);render();
- console.log("S25 total",s.length,"matched",ss.length,"U6 stop total",b.length,"matched",bb.length);
-}catch(e){console.error("departure refresh",e);if(!departures.length)render();}}
-refresh();setInterval(refresh,20000);setInterval(render,1000);
-$("fs").addEventListener("click",async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch(e){console.error(e);}});
+
+function clock(){
+  var d=new Date();
+
+  var h=("0"+d.getHours()).slice(-2);
+  var m=("0"+d.getMinutes()).slice(-2);
+
+  document.getElementById("clock").innerHTML=h+":"+m;
+}
+
+function fullscreen(){
+  var e=document.documentElement;
+
+  if(e.requestFullscreen){
+    e.requestFullscreen();
+  }else if(e.webkitRequestFullscreen){
+    e.webkitRequestFullscreen();
+  }
+}
+
+document.getElementById("fs").onclick=fullscreen;
+
+clock();
+setInterval(clock,1000);
+
+loadData();
+setInterval(loadData,60000);
 </script>
+
 </body>
 </html>
