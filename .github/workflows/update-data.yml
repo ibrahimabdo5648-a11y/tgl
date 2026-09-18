@@ -20,100 +20,126 @@ jobs:
           import urllib.request
           from datetime import datetime, timezone
 
-          url = "https://v6.vbb.transport.rest/stops/900089303/departures?duration=120&results=100&remarks=true&language=de"
-
-          req = urllib.request.Request(
-              url,
-              headers={"User-Agent": "Mozilla/5.0"}
-          )
-
-          with urllib.request.urlopen(req, timeout=30) as r:
-              data = json.loads(r.read().decode("utf-8"))
-
-          departures = data.get("departures", data)
-
-          result = []
-
-          now = datetime.now(timezone.utc)
-
-          for x in departures:
-              line = x.get("line") or {}
-              name = str(line.get("name", ""))
-
-              direction = (
-                  x.get("direction")
-                  or x.get("destination", {}).get("name", "")
-                  or ""
-              )
-
-              when = x.get("when") or x.get("plannedWhen")
-
-              if not when:
-                  continue
-
-              try:
-                  dt = datetime.fromisoformat(
-                      when.replace("Z", "+00:00")
-                  )
-              except:
-                  continue
-
-              if dt <= now:
-                  continue
-
-              if name.upper().startswith("S25") and "TELTOW" in direction.upper():
-                  result.append({
-                      "time": dt.timestamp(),
-                      "line": "S25",
-                      "destination": "TELTOW STADT"
-                  })
-
-              if "KURT-SCHUMACHER-PLATZ" in direction.upper():
-                  result.append({
-                      "time": dt.timestamp(),
-                      "line": "U6",
-                      "destination": "KURT-SCHUMACHER-PLATZ"
-                  })
-
-          result.sort(key=lambda x: x["time"])
-
-          output = []
-
-          for x in result[:5]:
-              minutes = int((x["time"] - now.timestamp()) / 60)
-
-              if minutes <= 0:
-                  countdown = "JETZT"
-              else:
-                  countdown = str(minutes) + " MIN"
-
-              output.append({
-                  "line": x["line"],
-                  "destination": x["destination"],
-                  "countdown": countdown
-              })
-
-          try:
-              weather_url = "https://api.open-meteo.com/v1/forecast?latitude=52.56&longitude=13.29&current=temperature_2m"
+          def get_json(url):
               req = urllib.request.Request(
-                  weather_url,
+                  url,
                   headers={"User-Agent": "Mozilla/5.0"}
               )
-
               with urllib.request.urlopen(req, timeout=30) as r:
-                  weather = json.loads(r.read().decode("utf-8"))
+                  return json.loads(r.read().decode("utf-8"))
 
-              temperature = str(
-                  round(weather["current"]["temperature_2m"])
+          # S Tegel
+          s25_data = get_json(
+              "https://v6.vbb.transport.rest/stops/900089303/departures"
+              "?duration=180&results=100&remarks=true&language=de"
+          )
+
+          # U Alt-Tegel
+          u6_data = get_json(
+              "https://v6.vbb.transport.rest/stops/900089301/departures"
+              "?duration=180&results=100&remarks=true&language=de"
+          )
+
+          now = datetime.now(timezone.utc)
+          departures = []
+
+          def process(data, station_type):
+              items = data.get("departures", data)
+
+              for x in items:
+                  line = x.get("line") or {}
+
+                  line_name = str(
+                      line.get("name")
+                      or x.get("line")
+                      or ""
+                  )
+
+                  direction = str(
+                      x.get("direction")
+                      or (x.get("destination") or {}).get("name", "")
+                      or x.get("destination")
+                      or ""
+                  )
+
+                  when = (
+                      x.get("when")
+                      or x.get("plannedWhen")
+                      or x.get("scheduledWhen")
+                  )
+
+                  if not when:
+                      continue
+
+                  try:
+                      dt = datetime.fromisoformat(
+                          when.replace("Z", "+00:00")
+                      )
+                  except:
+                      continue
+
+                  if dt <= now:
+                      continue
+
+                  # S25 -> Teltow Stadt
+                  if (
+                      station_type == "s25"
+                      and line_name.upper().startswith("S25")
+                      and "TELTOW" in direction.upper()
+                  ):
+                      departures.append({
+                          "time": dt.isoformat(),
+                          "line": "S25",
+                          "destination": "TELTOW STADT"
+                      })
+
+                  # Replacement bus -> Kurt-Schumacher-Platz
+                  if (
+                      station_type == "u6"
+                      and "KURT-SCHUMACHER-PLATZ"
+                      in direction.upper()
+                  ):
+                      departures.append({
+                          "time": dt.isoformat(),
+                          "line": "U6",
+                          "destination": "KURT-SCHUMACHER-PLATZ"
+                      })
+
+          process(s25_data, "s25")
+          process(u6_data, "u6")
+
+          # Sort all departures together
+          departures.sort(key=lambda x: x["time"])
+
+          # Keep more than the 5 currently displayed
+          departures = departures[:20]
+
+          # Weather
+          try:
+              weather = get_json(
+                  "https://api.open-meteo.com/v1/forecast"
+                  "?latitude=52.56&longitude=13.29"
+                  "&current=temperature_2m"
               )
-          except:
-              temperature = "--"
+
+              temperature = weather["current"]["temperature_2m"]
+
+          except Exception:
+              temperature = None
+
+          output = {
+              "updated": datetime.now(timezone.utc).isoformat(),
+              "temperature": temperature,
+              "departures": departures
+          }
 
           with open("data.json", "w", encoding="utf-8") as f:
-              json.dump({
-                  "temperature": temperature,
-                  "departures": output
-              }, f, ensure_ascii=False, indent=2)
+              json.dump(
+                  output,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
           PY
 
       - name: Save updated data
