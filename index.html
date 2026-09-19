@@ -2,234 +2,43 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050505">
 <title>Abfahrtsanzeige</title>
 
 <style>
 *{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#050505;
-}
-
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#ffad18;
-}
-
-.board{
-  width:100vw;
-  height:100vh;
-  background:#050505;
-  display:flex;
-  flex-direction:column;
-  position:relative;
-}
-
-.top{
-  height:15%;
-  min-height:70px;
-  background:#050505;
-  display:grid;
-  grid-template-columns:20% 50% 30%;
-  align-items:center;
-  padding:0 3%;
-  border-bottom:2px solid #ffad18;
-}
-
-.top>div{
-  color:#ffad18;
-  font-family:"Courier New",monospace;
-  font-size:clamp(24px,4vw,60px);
-  font-weight:900;
-  white-space:nowrap;
-  text-shadow:
-    0 0 5px #ff8c00,
-    0 0 12px rgba(255,126,0,.65);
-}
-
-.top .right{
-  text-align:right;
-}
-
-.screen{
-  flex:1;
-  background:#050505;
-  position:relative;
-  overflow:hidden;
-  padding:1.2% 2.2% 5%;
-}
-
-.screen:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:.22;
-  background-image:
-    radial-gradient(
-      circle,
-      rgba(255,174,30,.5) 0 1px,
-      transparent 1.3px
-    );
-  background-size:5px 5px;
-}
-
-.rows{
-  position:relative;
-  z-index:1;
-  width:100%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-evenly;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:20% 55% 25%;
-  align-items:center;
-  height:13.2%;
-  min-height:45px;
-  color:#ffad18;
-  font-family:"Courier New",monospace;
-  font-weight:700;
-  letter-spacing:.02em;
-  text-shadow:
-    0 0 5px #ff8c00,
-    0 0 12px rgba(255,126,0,.65);
-}
-
-.line{
-  font-size:clamp(21px,3.2vw,55px);
-  white-space:nowrap;
-}
-
-.dest{
-  font-size:clamp(20px,3.05vw,52px);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.count{
-  text-align:right;
-  font-size:clamp(22px,3.15vw,55px);
-  white-space:nowrap;
-}
-
-.badge{
-  display:inline-block;
-  min-width:3.1em;
-  margin-right:.45em;
-  color:#ffad18;
-}
-
-.message{
-  font-size:clamp(19px,2.6vw,44px);
-  color:#ffad18;
-  font-family:"Courier New",monospace;
-  text-align:center;
-  text-shadow:0 0 6px #ff8c00;
-}
-
-.info{
-  position:absolute;
-  z-index:3;
-  left:2.5%;
-  right:2.5%;
-  bottom:1.5%;
-  display:flex;
-  gap:2.2vw;
-  align-items:center;
-  color:#ffad18;
-  font-family:"Courier New",monospace;
-  font-weight:900;
-  font-size:clamp(18px,2.4vw,40px);
-  text-shadow:
-    0 0 5px #ff8c00,
-    0 0 12px rgba(255,126,0,.65);
-}
-
-.weather{
-  white-space:nowrap;
-}
-
-.quote{
-  flex:1;
-  text-align:center;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.fs{
-  position:fixed;
-  z-index:20;
-  right:10px;
-  bottom:10px;
-  width:34px;
-  height:30px;
-  padding:0;
-  border:1px solid #ffad18;
-  background:#050505;
-  color:#ffad18;
-  border-radius:2px;
-  cursor:pointer;
-  font:900 21px/28px Arial,sans-serif;
-  text-shadow:0 0 4px #ff8c00;
-}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050505}
+body{font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;color:#ffad18}
+.board{width:100vw;height:100vh;background:#050505;display:flex;flex-direction:column;position:relative}
+.top{height:15%;min-height:70px;background:#050505;display:grid;grid-template-columns:20% 55% 25%;align-items:center;padding:0 3.5%;border-bottom:2px solid #ffad18;box-shadow:none}
+.top>div{color:#ffad18;font-family:"Courier New",monospace;font-size:clamp(28px,4vw,64px);font-weight:900;white-space:nowrap;text-shadow:0 0 5px #ff8c00,0 0 12px rgba(255,126,0,.65)}
+.top .right{text-align:right}
+.screen{flex:1;background:#050505;position:relative;overflow:hidden;padding:1.2% 2.2% 5%;box-shadow:none}
+.screen:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;background-image:radial-gradient(circle,rgba(255,174,30,.5) 0 1px,transparent 1.3px);background-size:5px 5px;mix-blend-mode:screen}
+.rows{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-evenly}
+.row{display:grid;grid-template-columns:18% 58% 24%;align-items:center;height:13.2%;min-height:45px;color:#ffad18;font-family:"Courier New",monospace;font-weight:700;letter-spacing:.02em;text-shadow:0 0 5px #ff8c00,0 0 12px rgba(255,126,0,.65)}
+.line{font-size:clamp(21px,3.2vw,55px);white-space:nowrap}
+.dest{font-size:clamp(20px,3.05vw,52px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.count{text-align:right;font-size:clamp(22px,3.15vw,55px);white-space:nowrap}
+.badge{display:inline-block;min-width:3.1em;margin-right:.45em;color:#ffad18}
+.message{font-size:clamp(19px,2.6vw,44px);color:#ffad18;font-family:"Courier New",monospace;text-align:center;text-shadow:0 0 6px #ff8c00}
+.info{position:absolute;z-index:3;left:2.5%;right:2.5%;bottom:1.5%;display:flex;gap:2.2vw;align-items:center;color:#ffad18;font-family:"Courier New",monospace;font-weight:900;font-size:clamp(18px,2.4vw,40px);text-shadow:0 0 5px #ff8c00,0 0 12px rgba(255,126,0,.65)}
+.weather{white-space:nowrap}
+.quote{flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fs{position:fixed;z-index:20;right:10px;bottom:10px;width:34px;height:30px;padding:0;border:1px solid #ffad18;background:#050505;color:#ffad18;border-radius:2px;cursor:pointer;font:900 21px/28px Arial,sans-serif;text-shadow:0 0 4px #ff8c00}
+.fs:active{transform:scale(.96)}
 
 @media(max-width:700px){
-
-  .top{
-    grid-template-columns:20% 50% 30%;
-    padding:0 2%;
-    height:14%;
-  }
-
-  .screen{
-    padding:2% 1.5% 7%;
-  }
-
-  .row{
-    grid-template-columns:20% 55% 25%;
-  }
-
-  .top>div{
-    font-size:clamp(18px,5vw,34px);
-  }
-
-  .line{
-    font-size:clamp(14px,4.4vw,27px);
-  }
-
-  .dest{
-    font-size:clamp(13px,4vw,25px);
-  }
-
-  .count{
-    font-size:clamp(15px,4.2vw,27px);
-  }
-
-  .info{
-    left:2%;
-    bottom:1.5%;
-    font-size:clamp(12px,3.4vw,22px);
-    gap:3vw;
-  }
-
-  .fs{
-    font-size:clamp(11px,3vw,18px);
-  }
+.top{grid-template-columns:25% 45% 30%;padding:0 2%;height:14%}
+.screen{padding:2% 1.5% 7%}
+.row{grid-template-columns:20% 55% 25%}
+.top>div{font-size:clamp(18px,5vw,34px)}
+.line{font-size:clamp(14px,4.4vw,27px)}
+.dest{font-size:clamp(13px,4vw,25px)}
+.count{font-size:clamp(15px,4.2vw,27px)}
+.info{left:2%;bottom:1.5%;font-size:clamp(12px,3.4vw,22px);gap:3vw}
+.fs{font-size:clamp(11px,3vw,18px)}
 }
 </style>
 </head>
@@ -252,435 +61,597 @@ body{
     <span id="clock">--:--:--</span>
     <span class="weather" id="weather">WETTER --°C</span>
     <span class="quote" id="quote">„Jeder Weg beginnt mit dem ersten Schritt.“</span>
-    <button class="fs" id="fs">⛶</button>
+    <button class="fs" id="fs" aria-label="Vollbild" title="Vollbild">⛶</button>
   </div>
 
 </div>
 
 <script>
 
-/* =========================
-   VBB
-   ========================= */
+/* =========================================================
+   TABLET-COMPATIBLE VERSION
+   Same API / same filtering / same display
+   Uses XMLHttpRequest instead of fetch
+   ========================================================= */
 
-var API="https://v6.vbb.transport.rest";
-var S_TEGEL="900089303";
-var U_ALT_TEGEL="900089301";
+var API = "https://v6.vbb.transport.rest";
+var S_TEGEL = "900089303";
+var U_ALT_TEGEL = "900089301";
 
-var departures=[];
+var departures = [];
 
-function $(id){
-  return document.getElementById(id);
+
+/* ---------- BASIC HELPERS ---------- */
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function dep(x) {
+    return x.when || x.plannedWhen;
+}
+
+function isFuture(x) {
+    var t = dep(x);
+
+    if (!t) {
+        return false;
+    }
+
+    return new Date(t).getTime() >= Date.now() - 30000;
+}
+
+function minutes(x) {
+    var value = Math.round(
+        (new Date(dep(x)).getTime() - Date.now()) / 60000
+    );
+
+    return Math.max(0, value);
 }
 
 
-/* =========================
-   DEPARTURE TIME
-   ========================= */
+/* ---------- S25 ---------- */
 
-function dep(x){
-  return x.when || x.plannedWhen;
-}
+function s25(x) {
 
-function isFuture(x){
+    if (!x.line) {
+        return false;
+    }
 
-  var t=dep(x);
+    if (x.line.name !== "S25") {
+        return false;
+    }
 
-  if(!t){
-    return false;
-  }
-
-  return new Date(t).getTime() >= new Date().getTime()-30000;
-}
-
-function minutes(x){
-
-  var t=dep(x);
-
-  if(!t){
-    return 999;
-  }
-
-  var diff=
-    (new Date(t).getTime()-new Date().getTime())/60000;
-
-  return Math.max(0,Math.round(diff));
-}
-
-function sortByTime(a,b){
-  return new Date(dep(a)).getTime() -
-         new Date(dep(b)).getTime();
+    return /teltow\s*stadt/i.test(x.direction || "");
 }
 
 
-/* =========================
-   S25
-   ========================= */
+/* ---------- REPLACEMENT BUS ---------- */
 
-function s25(x){
+function replacementBus(x) {
 
-  if(!x.line){
-    return false;
-  }
+    var d = (x.direction || "").toLowerCase();
 
-  if(x.line.name!=="S25"){
-    return false;
-  }
+    var n = "";
+    var p = "";
 
-  return /teltow\s*stadt/i.test(x.direction || "");
+    if (x.line) {
+        n = (x.line.name || "").toLowerCase();
+        p = (x.line.product || "").toLowerCase();
+    }
+
+    return /kurt[-\s]?schumacher[-\s]?platz/.test(d) &&
+        (
+            p === "bus" ||
+            n.indexOf("u6") !== -1 ||
+            n.indexOf("ersatz") !== -1 ||
+            n.indexOf("bus") !== -1
+        );
 }
 
 
-/* =========================
-   REPLACEMENT BUS
-   ========================= */
+/* ---------- SORT ---------- */
 
-function replacementBus(x){
-
-  var direction=(x.direction || "").toLowerCase();
-
-  var name="";
-
-  if(x.line && x.line.name){
-    name=x.line.name.toLowerCase();
-  }
-
-  var product="";
-
-  if(x.line && x.line.product){
-    product=x.line.product.toLowerCase();
-  }
-
-  if(!/kurt[-\s]?schumacher[-\s]?platz/.test(direction)){
-    return false;
-  }
-
-  return(
-    product==="bus" ||
-    name.indexOf("u6")>=0 ||
-    name.indexOf("ersatz")>=0 ||
-    name.indexOf("bus")>=0
-  );
+function sortByTime(a, b) {
+    return new Date(dep(a)).getTime() -
+           new Date(dep(b)).getTime();
 }
 
 
-/* =========================
+/* =========================================================
    CLOCK
-   ========================= */
+   ========================================================= */
 
-function updateClock(){
+function updateClock() {
 
-  var d=new Date();
-
-  var h=("0"+d.getHours()).slice(-2);
-  var m=("0"+d.getMinutes()).slice(-2);
-  var s=("0"+d.getSeconds()).slice(-2);
-
-  $("clock").innerHTML=h+":"+m+":"+s;
+    $("clock").textContent =
+        new Date().toLocaleTimeString(
+            "de-DE",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        );
 }
 
 updateClock();
-setInterval(updateClock,1000);
+setInterval(updateClock, 1000);
 
 
-/* =========================
+/* =========================================================
    WEATHER
-   ========================= */
+   ========================================================= */
 
-function updateWeather(){
+function updateWeather() {
 
-  var x=new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
 
-  x.open(
-    "GET",
-    "https://api.open-meteo.com/v1/forecast?latitude=52.56&longitude=13.29&current=temperature_2m,weather_code&timezone=Europe%2FBerlin&t="+new Date().getTime(),
-    true
-  );
+    var url =
+        "https://api.open-meteo.com/v1/forecast" +
+        "?latitude=52.56" +
+        "&longitude=13.29" +
+        "&current=temperature_2m,weather_code" +
+        "&timezone=Europe%2FBerlin";
 
-  x.onreadystatechange=function(){
+    try {
 
-    if(x.readyState!==4){
-      return;
+        xhr.open("GET", url, true);
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+
+                try {
+
+                    var d = JSON.parse(xhr.responseText);
+
+                    var t = Math.round(
+                        d.current.temperature_2m
+                    );
+
+                    var code = d.current.weather_code;
+
+                    var icon;
+
+                    if (code === 0) {
+                        icon = "☀";
+                    } else if (code <= 3) {
+                        icon = "☁";
+                    } else if (code <= 48) {
+                        icon = "≋";
+                    } else if (code <= 67) {
+                        icon = "☂";
+                    } else if (code <= 77) {
+                        icon = "❄";
+                    } else {
+                        icon = "☂";
+                    }
+
+                    $("weather").textContent =
+                        icon + " " + t + "°C";
+
+                } catch (e) {
+
+                    $("weather").textContent =
+                        "WETTER --°C";
+                }
+
+            } else {
+
+                $("weather").textContent =
+                    "WETTER --°C";
+            }
+        };
+
+        xhr.onerror = function() {
+            $("weather").textContent = "WETTER --°C";
+        };
+
+        xhr.send(null);
+
+    } catch (e) {
+
+        $("weather").textContent = "WETTER --°C";
     }
-
-    if(x.status===200){
-
-      try{
-
-        var d=JSON.parse(x.responseText);
-
-        var t=Math.round(
-          d.current.temperature_2m
-        );
-
-        $("weather").innerHTML=t+"°C";
-
-      }catch(e){
-
-        $("weather").innerHTML="--°C";
-
-      }
-
-    }else{
-
-      $("weather").innerHTML="--°C";
-
-    }
-
-  };
-
-  x.send(null);
 }
 
 updateWeather();
-setInterval(updateWeather,600000);
+setInterval(updateWeather, 600000);
 
 
-/* =========================
+/* =========================================================
    QUOTES
-   ========================= */
+   ========================================================= */
 
-var quotes=[
-  "„Jeder Weg beginnt mit dem ersten Schritt.“",
-  "„Der nächste Schritt bringt dich weiter.“",
-  "„Neue Wege, neue Möglichkeiten.“",
-  "„Manchmal ist der Weg das Ziel.“",
-  "„Heute ist ein guter Tag für einen neuen Weg.“",
-  "„Gute Reise!“"
+var quotes = [
+    "„Jeder Weg beginnt mit dem ersten Schritt.“",
+    "„Der nächste Schritt bringt dich weiter.“",
+    "„Neue Wege, neue Möglichkeiten.“",
+    "„Manchmal ist der Weg das Ziel.“",
+    "„Heute ist ein guter Tag für einen neuen Weg.“",
+    "„Gute Reise!“"
 ];
 
-function updateQuote(){
+function updateQuote() {
 
-  var day=Math.floor(
-    new Date().getTime()/86400000
-  );
+    var day = Math.floor(Date.now() / 86400000);
 
-  $("quote").innerHTML=
-    quotes[day%quotes.length];
+    $("quote").textContent =
+        quotes[day % quotes.length];
 }
 
 updateQuote();
 
 
-/* =========================
-   DISPLAY ROW
-   ========================= */
+/* =========================================================
+   ROW
+   ========================================================= */
 
-function rowHTML(x){
+function rowHTML(x) {
 
-  var m=minutes(x);
+    var m = minutes(x);
 
-  var isBus=x.kind==="bus";
+    var isBus = x.kind === "bus";
 
-  var line=isBus ? "U6" : "S25";
+    var line = isBus ? "U6" : "S25";
 
-  var destination=isBus
-    ? "KURT-SCHUMACHER-PLATZ"
-    : "TELTOW STADT";
+    var destination =
+        isBus
+        ? "KURT-SCHUMACHER-PLATZ"
+        : "TELTOW STADT";
 
-  var countdown=
-    m<=0 ? "JETZT" : m+" min";
+    var count =
+        m <= 0
+        ? "JETZT"
+        : m + " min";
 
-  return(
-    '<div class="row">'+
-      '<div class="line">'+
-        '<span class="badge">'+line+'</span>'+
-      '</div>'+
-      '<div class="dest">'+destination+'</div>'+
-      '<div class="count">'+countdown+'</div>'+
-    '</div>'
-  );
+    return (
+        '<div class="row">' +
+            '<div class="line">' +
+                '<span class="badge">' +
+                    line +
+                '</span>' +
+            '</div>' +
+
+            '<div class="dest">' +
+                destination +
+            '</div>' +
+
+            '<div class="count">' +
+                count +
+            '</div>' +
+        '</div>'
+    );
 }
 
 
-/* =========================
+/* =========================================================
    RENDER
-   ========================= */
+   ========================================================= */
 
-function render(){
+function render() {
 
-  var list=[];
+    var combined = [];
 
-  var i;
+    var i;
 
-  for(i=0;i<departures.length;i++){
+    for (i = 0; i < departures.length; i++) {
 
-    if(isFuture(departures[i])){
-      list.push(departures[i]);
+        if (isFuture(departures[i])) {
+            combined.push(departures[i]);
+        }
     }
 
-  }
+    combined.sort(sortByTime);
 
-  list.sort(sortByTime);
+    combined = combined.slice(0, 7);
 
-  list=list.slice(0,7);
+    if (combined.length) {
 
-  if(list.length===0){
+        var html = "";
 
-    $("rows").innerHTML=
-      '<div class="message">KEINE ABFAHRTEN VERFÜGBAR</div>';
+        for (i = 0; i < combined.length; i++) {
+            html += rowHTML(combined[i]);
+        }
 
-    return;
-  }
+        $("rows").innerHTML = html;
 
-  var html="";
+    } else {
 
-  for(i=0;i<list.length;i++){
-    html+=rowHTML(list[i]);
-  }
-
-  $("rows").innerHTML=html;
+        $("rows").innerHTML =
+            '<div class="message">' +
+            'KEINE ABFAHRTEN VERFÜGBAR' +
+            '</div>';
+    }
 }
 
 
-/* =========================
-   LOAD VBB STOP
-   ========================= */
+/* =========================================================
+   VBB REQUEST
+   ========================================================= */
 
-function get(id,callback){
+function get(id, callback, errorCallback) {
 
-  var x=new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
 
-  var url=
-    API+
-    "/stops/"+
-    id+
-    "/departures?duration=90&results=50&remarks=true&language=de";
+    var url =
+        API +
+        "/stops/" +
+        id +
+        "/departures" +
+        "?duration=90" +
+        "&results=50" +
+        "&remarks=true" +
+        "&language=de";
 
-  x.open("GET",url,true);
+    try {
 
-  x.onreadystatechange=function(){
+        xhr.open("GET", url, true);
 
-    if(x.readyState!==4){
-      return;
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+
+                try {
+
+                    var data = JSON.parse(xhr.responseText);
+
+                    callback(
+                        data.departures || []
+                    );
+
+                } catch (e) {
+
+                    errorCallback(e);
+                }
+
+            } else {
+
+                errorCallback(
+                    new Error("HTTP " + xhr.status)
+                );
+            }
+        };
+
+        xhr.onerror = function() {
+            errorCallback(
+                new Error("NETWORK ERROR")
+            );
+        };
+
+        xhr.ontimeout = function() {
+            errorCallback(
+                new Error("TIMEOUT")
+            );
+        };
+
+        xhr.timeout = 15000;
+
+        xhr.send(null);
+
+    } catch (e) {
+
+        errorCallback(e);
     }
-
-    if(x.status===200){
-
-      try{
-
-        var d=JSON.parse(x.responseText);
-
-        callback(null,d.departures || []);
-
-      }catch(e){
-
-        callback(e,null);
-
-      }
-
-    }else{
-
-      callback(new Error(x.status),null);
-
-    }
-
-  };
-
-  x.send(null);
 }
 
 
-/* =========================
-   REFRESH DATA
-   ========================= */
+/* =========================================================
+   REFRESH
+   ========================================================= */
 
-function refresh(){
+function refresh() {
 
-  get(S_TEGEL,function(error1,s){
+    var s25Data = null;
+    var busData = null;
 
-    if(error1){
+    var s25Done = false;
+    var busDone = false;
 
-      if(departures.length===0){
-        $("rows").innerHTML=
-          '<div class="message">LIVE-DATEN NICHT ERREICHBAR</div>';
-      }
+    var failed = false;
 
-      return;
+
+    function finish() {
+
+        if (!s25Done || !busDone) {
+            return;
+        }
+
+        if (failed) {
+
+            if (!departures.length) {
+
+                $("rows").innerHTML =
+                    '<div class="message">' +
+                    'LIVE-DATEN NICHT ERREICHBAR' +
+                    '</div>';
+            }
+
+            return;
+        }
+
+
+        departures = [];
+
+
+        /* S25 */
+
+        var i;
+
+        for (i = 0; i < s25Data.length; i++) {
+
+            if (s25(s25Data[i])) {
+
+                var s = {};
+
+                /* copy original departure */
+                var key;
+
+                for (key in s25Data[i]) {
+                    if (s25Data[i].hasOwnProperty(key)) {
+                        s[key] = s25Data[i][key];
+                    }
+                }
+
+                s.kind = "s25";
+
+                departures.push(s);
+            }
+        }
+
+
+        /* Replacement bus */
+
+        for (i = 0; i < busData.length; i++) {
+
+            if (replacementBus(busData[i])) {
+
+                var b = {};
+
+                for (key in busData[i]) {
+                    if (busData[i].hasOwnProperty(key)) {
+                        b[key] = busData[i][key];
+                    }
+                }
+
+                b.kind = "bus";
+
+                departures.push(b);
+            }
+        }
+
+
+        departures.sort(sortByTime);
+
+        render();
     }
 
-    get(U_ALT_TEGEL,function(error2,b){
 
-      if(error2){
+    /* S Tegel */
 
-        if(departures.length===0){
-          $("rows").innerHTML=
-            '<div class="message">LIVE-DATEN NICHT ERREICHBAR</div>';
+    get(
+        S_TEGEL,
+
+        function(data) {
+
+            s25Data = data;
+            s25Done = true;
+            finish();
+
+        },
+
+        function(error) {
+
+            console.log("S25 ERROR:", error);
+
+            failed = true;
+            s25Done = true;
+            finish();
         }
+    );
 
-        return;
-      }
 
-      var result=[];
-      var i;
+    /* U Alt-Tegel */
 
-      /* S25 */
+    get(
+        U_ALT_TEGEL,
 
-      for(i=0;i<s.length;i++){
+        function(data) {
 
-        if(s25(s[i])){
+            busData = data;
+            busDone = true;
+            finish();
 
-          s[i].kind="s25";
-          result.push(s[i]);
+        },
 
+        function(error) {
+
+            console.log("BUS ERROR:", error);
+
+            failed = true;
+            busDone = true;
+            finish();
         }
-
-      }
-
-      /* Replacement bus */
-
-      for(i=0;i<b.length;i++){
-
-        if(replacementBus(b[i])){
-
-          b[i].kind="bus";
-          result.push(b[i]);
-
-        }
-
-      }
-
-      result.sort(sortByTime);
-
-      departures=result;
-
-      render();
-
-    });
-
-  });
-
+    );
 }
 
 
-/* =========================
+/* =========================================================
    START
-   ========================= */
+   ========================================================= */
 
 refresh();
 
-setInterval(refresh,20000);
-setInterval(render,1000);
+
+/*
+   Refresh every 20 seconds.
+   This is intentionally the same interval
+   as the laptop version.
+*/
+
+setInterval(refresh, 20000);
 
 
-/* =========================
+/*
+   Countdown updates every second.
+*/
+
+setInterval(render, 1000);
+
+
+/* =========================================================
    FULLSCREEN
-   ========================= */
+   ========================================================= */
 
-$("fs").onclick=function(){
+$("fs").onclick = function() {
 
-  var e=document.documentElement;
+    try {
 
-  try{
+        var doc = document;
 
-    if(e.requestFullscreen){
-      e.requestFullscreen();
-    }else if(e.webkitRequestFullscreen){
-      e.webkitRequestFullscreen();
+        if (
+            !doc.fullscreenElement &&
+            !doc.webkitFullscreenElement
+        ) {
+
+            var element = document.documentElement;
+
+            if (element.requestFullscreen) {
+
+                element.requestFullscreen();
+
+            } else if (element.webkitRequestFullscreen) {
+
+                element.webkitRequestFullscreen();
+
+            }
+
+        } else {
+
+            if (doc.exitFullscreen) {
+
+                doc.exitFullscreen();
+
+            } else if (doc.webkitExitFullscreen) {
+
+                doc.webkitExitFullscreen();
+
+            }
+        }
+
+    } catch (e) {
+
+        console.log("Fullscreen error:", e);
     }
-
-  }catch(err){}
-
 };
 
 </script>
