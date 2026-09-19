@@ -5,17 +5,148 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tegel Abfahrtsanzeige</title>
 <style>
-html,body{margin:0;width:100%;height:100%;background:#050505;color:#ffad18;overflow:hidden}
-body{font-family:"Courier New",monospace;font-weight:bold}
-#board{width:100%;height:100%;display:flex;flex-direction:column}
-#head{height:15%;display:grid;grid-template-columns:20% 55% 25%;align-items:center;border-bottom:2px solid #ffad18;padding:0 3%;font-size:28px}
-.right{text-align:right}
-#rows{flex:1;display:flex;flex-direction:column;justify-content:space-around;padding:2%}
-.row{display:grid;grid-template-columns:20% 55% 25%;font-size:27px}
-.count{text-align:right}
-#info{ height:8%; display:flex; align-items:center; padding:0 3%; font-size:18px; }  #clock{ display:inline-block; min-width:75px; margin-right:25px; }  #weather{ display:inline-block; min-width:85px; margin-right:30px; }  #quote{ flex:1; text-align:center; white-space:nowrap; overflow:hidden; }
-#quote{flex:1;text-align:center;white-space:nowrap;overflow:hidden}
-#fs{position:fixed;right:8px;bottom:8px;background:#050505;color:#ffad18;border:1px solid #ffad18;font-size:20px}
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:#050505;
+  color:#ffb52a;
+  overflow:hidden;
+  font-family:"Courier New",monospace;
+  font-weight:bold;
+}
+
+#board{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  background:
+    radial-gradient(circle at center,rgba(255,170,20,.06),transparent 65%),
+    #050505;
+}
+
+/* HEADER */
+#head{
+  height:14%;
+  display:grid;
+  grid-template-columns:20% 55% 25%;
+  align-items:center;
+  padding:0 3%;
+  box-sizing:border-box;
+  border-bottom:2px solid #ffb52a;
+  font-size:30px;
+  letter-spacing:2px;
+  text-shadow:
+    0 0 4px #ffb52a,
+    0 0 10px rgba(255,181,42,.45);
+}
+
+.right{
+  text-align:right;
+}
+
+/* DEPARTURES */
+#rows{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-around;
+  padding:2% 3%;
+  box-sizing:border-box;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:20% 55% 25%;
+  align-items:center;
+  min-height:13%;
+  font-size:30px;
+  letter-spacing:2px;
+  text-shadow:
+    0 0 4px #ffb52a,
+    0 0 9px rgba(255,181,42,.4);
+}
+
+.row:nth-child(even){
+  background:rgba(255,181,42,.025);
+}
+
+.count{
+  text-align:right;
+  font-size:32px;
+}
+
+/* BOTTOM INFORMATION */
+#info{
+  height:9%;
+  display:flex;
+  align-items:center;
+  padding:0 3%;
+  box-sizing:border-box;
+  border-top:2px solid #ffb52a;
+  font-size:19px;
+  letter-spacing:1px;
+  text-shadow:
+    0 0 4px #ffb52a,
+    0 0 8px rgba(255,181,42,.35);
+}
+
+#clock{
+  display:inline-block;
+  min-width:75px;
+  margin-right:25px;
+}
+
+#weather{
+  display:inline-block;
+  min-width:85px;
+  margin-right:30px;
+}
+
+#quote{
+  flex:1;
+  text-align:center;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+/* FULLSCREEN BUTTON */
+#fs{
+  position:fixed;
+  right:8px;
+  bottom:8px;
+  width:34px;
+  height:34px;
+  background:#050505;
+  color:#ffb52a;
+  border:1px solid #ffb52a;
+  font-size:20px;
+  line-height:28px;
+  padding:0;
+  opacity:.8;
+}
+
+/* OLD TABLETS */
+@media(max-width:700px){
+  #head{
+    font-size:23px;
+    letter-spacing:1px;
+  }
+
+  .row{
+    font-size:23px;
+    letter-spacing:1px;
+  }
+
+  .count{
+    font-size:25px;
+  }
+
+  #info{
+    font-size:16px;
+  }
+}
 </style>
 </head>
 
