@@ -88,7 +88,19 @@ function showData(d){
       html+='<div class="row">';
       html+='<div>'+list[i].line+'</div>';
       html+='<div>'+list[i].destination+'</div>';
-      html+='<div class="count">'+list[i].countdown+'</div>';
+var departureTime = new Date(list[i].time).getTime();
+var now = new Date().getTime();
+var minutes = Math.floor((departureTime - now) / 60000);
+
+var countdown;
+
+if(minutes <= 0){
+  countdown = "JETZT";
+}else{
+  countdown = minutes + " MIN";
+}
+
+html+='<div class="count">'+countdown+'</div>';
       html+='</div>';
     }else{
       html+='<div class="row"><div></div><div></div><div></div></div>';
@@ -97,7 +109,7 @@ function showData(d){
 
   rows.innerHTML=html;
 
-  if(d.temperature){
+  if(d.temperature !== null && d.temperature !== undefined){
     document.getElementById("weather").innerHTML=d.temperature+"°C";
   }
 }
