@@ -1,281 +1,688 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tegel Abfahrtsanzeige</title>
+<meta name="theme-color" content="#050505">
+<title>Abfahrtsanzeige</title>
+
 <style>
+*{box-sizing:border-box}
+
 html,body{
   margin:0;
   width:100%;
   height:100%;
-  background:#050505;
-  color:#ffb52a;
   overflow:hidden;
-  font-family:"Courier New",monospace;
-  font-weight:bold;
+  background:#050505;
 }
 
-#board{
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#ffad18;
+}
+
+.board{
+  width:100vw;
+  height:100vh;
+  background:#050505;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+.top{
+  height:15%;
+  min-height:70px;
+  background:#050505;
+  display:grid;
+  grid-template-columns:20% 50% 30%;
+  align-items:center;
+  padding:0 3%;
+  border-bottom:2px solid #ffad18;
+}
+
+.top>div{
+  color:#ffad18;
+  font-family:"Courier New",monospace;
+  font-size:clamp(24px,4vw,60px);
+  font-weight:900;
+  white-space:nowrap;
+  text-shadow:
+    0 0 5px #ff8c00,
+    0 0 12px rgba(255,126,0,.65);
+}
+
+.top .right{
+  text-align:right;
+}
+
+.screen{
+  flex:1;
+  background:#050505;
+  position:relative;
+  overflow:hidden;
+  padding:1.2% 2.2% 5%;
+}
+
+.screen:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.22;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(255,174,30,.5) 0 1px,
+      transparent 1.3px
+    );
+  background-size:5px 5px;
+}
+
+.rows{
+  position:relative;
+  z-index:1;
   width:100%;
   height:100%;
   display:flex;
   flex-direction:column;
-  background:
-    radial-gradient(circle at center,rgba(255,170,20,.06),transparent 65%),
-    #050505;
-}
-
-/* HEADER */
-#head{
-  height:14%;
-  display:grid;
-  grid-template-columns:20% 45% 35%;
-  align-items:center;
-  padding:0 3%;
-  box-sizing:border-box;
-  border-bottom:2px solid #ffb52a;
-  font-size:30px;
-  letter-spacing:2px;
-  text-shadow:
-    0 0 4px #ffb52a,
-    0 0 10px rgba(255,181,42,.45);
-}
-
-.right{
-  text-align:right;
-}
-
-/* DEPARTURES */
-#rows{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-around;
-  padding:2% 3%;
-  box-sizing:border-box;
+  justify-content:space-evenly;
 }
 
 .row{
   display:grid;
   grid-template-columns:20% 55% 25%;
   align-items:center;
-  min-height:13%;
-  font-size:30px;
-  letter-spacing:2px;
+  height:13.2%;
+  min-height:45px;
+  color:#ffad18;
+  font-family:"Courier New",monospace;
+  font-weight:700;
+  letter-spacing:.02em;
   text-shadow:
-    0 0 4px #ffb52a,
-    0 0 9px rgba(255,181,42,.4);
+    0 0 5px #ff8c00,
+    0 0 12px rgba(255,126,0,.65);
 }
 
-.row:nth-child(even){
-  background:rgba(255,181,42,.025);
+.line{
+  font-size:clamp(21px,3.2vw,55px);
+  white-space:nowrap;
+}
+
+.dest{
+  font-size:clamp(20px,3.05vw,52px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .count{
   text-align:right;
-  font-size:32px;
+  font-size:clamp(22px,3.15vw,55px);
+  white-space:nowrap;
 }
 
-/* BOTTOM INFORMATION */
-#info{
-  height:9%;
+.badge{
+  display:inline-block;
+  min-width:3.1em;
+  margin-right:.45em;
+  color:#ffad18;
+}
+
+.message{
+  font-size:clamp(19px,2.6vw,44px);
+  color:#ffad18;
+  font-family:"Courier New",monospace;
+  text-align:center;
+  text-shadow:0 0 6px #ff8c00;
+}
+
+.info{
+  position:absolute;
+  z-index:3;
+  left:2.5%;
+  right:2.5%;
+  bottom:1.5%;
   display:flex;
+  gap:2.2vw;
   align-items:center;
-  padding:0 3%;
-  box-sizing:border-box;
-  border-top:2px solid #ffb52a;
-  font-size:19px;
-  letter-spacing:1px;
+  color:#ffad18;
+  font-family:"Courier New",monospace;
+  font-weight:900;
+  font-size:clamp(18px,2.4vw,40px);
   text-shadow:
-    0 0 4px #ffb52a,
-    0 0 8px rgba(255,181,42,.35);
+    0 0 5px #ff8c00,
+    0 0 12px rgba(255,126,0,.65);
 }
 
-#clock{
-  display:inline-block;
-  min-width:75px;
-  margin-right:25px;
+.weather{
+  white-space:nowrap;
 }
 
-#weather{
-  display:inline-block;
-  min-width:85px;
-  margin-right:30px;
-}
-
-#quote{
+.quote{
   flex:1;
   text-align:center;
   white-space:nowrap;
   overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-/* FULLSCREEN BUTTON */
-#fs{
+.fs{
   position:fixed;
-  right:8px;
-  bottom:8px;
+  z-index:20;
+  right:10px;
+  bottom:10px;
   width:34px;
-  height:34px;
-  background:#050505;
-  color:#ffb52a;
-  border:1px solid #ffb52a;
-  font-size:20px;
-  line-height:28px;
+  height:30px;
   padding:0;
-  opacity:.8;
+  border:1px solid #ffad18;
+  background:#050505;
+  color:#ffad18;
+  border-radius:2px;
+  cursor:pointer;
+  font:900 21px/28px Arial,sans-serif;
+  text-shadow:0 0 4px #ff8c00;
 }
 
-/* OLD TABLETS */
 @media(max-width:700px){
-  #head{
-    font-size:23px;
-    letter-spacing:1px;
+
+  .top{
+    grid-template-columns:20% 50% 30%;
+    padding:0 2%;
+    height:14%;
+  }
+
+  .screen{
+    padding:2% 1.5% 7%;
   }
 
   .row{
-    font-size:23px;
-    letter-spacing:1px;
+    grid-template-columns:20% 55% 25%;
+  }
+
+  .top>div{
+    font-size:clamp(18px,5vw,34px);
+  }
+
+  .line{
+    font-size:clamp(14px,4.4vw,27px);
+  }
+
+  .dest{
+    font-size:clamp(13px,4vw,25px);
   }
 
   .count{
-    font-size:25px;
+    font-size:clamp(15px,4.2vw,27px);
   }
 
-  #info{
-    font-size:16px;
+  .info{
+    left:2%;
+    bottom:1.5%;
+    font-size:clamp(12px,3.4vw,22px);
+    gap:3vw;
+  }
+
+  .fs{
+    font-size:clamp(11px,3vw,18px);
   }
 }
 </style>
 </head>
 
 <body>
-<div id="board">
 
-<div id="head">
-<div>LINIE</div>
-<div>ZIEL</div>
-<div class="right">ABFAHRT IN</div>
-</div>
+<div class="board">
 
-<div id="rows">
-<div class="row"><div>--</div><div>LIVE DATEN</div><div class="count">--</div></div>
-<div class="row"><div>--</div><div></div><div class="count">--</div></div>
-<div class="row"><div>--</div><div></div><div class="count">--</div></div>
-<div class="row"><div>--</div><div></div><div class="count">--</div></div>
-<div class="row"><div>--</div><div></div><div class="count">--</div></div>
-</div>
+  <div class="top">
+    <div class="title">Linie</div>
+    <div class="middle">Ziel</div>
+    <div class="right">Abfahrt in</div>
+  </div>
 
-<div id="info">
-<span id="clock">--:--</span>
-<span id="weather">--°C</span>
-<span id="quote">„Jeder Weg beginnt mit dem ersten Schritt.“</span>
-</div>
+  <div class="screen">
+    <div class="rows" id="rows"></div>
+  </div>
 
-<button id="fs">⛶</button>
+  <div class="info">
+    <span id="clock">--:--:--</span>
+    <span class="weather" id="weather">WETTER --°C</span>
+    <span class="quote" id="quote">„Jeder Weg beginnt mit dem ersten Schritt.“</span>
+    <button class="fs" id="fs">⛶</button>
+  </div>
 
 </div>
 
 <script>
-var dataUrl="data.json";
 
-function loadData(){
+/* =========================
+   VBB
+   ========================= */
+
+var API="https://v6.vbb.transport.rest";
+var S_TEGEL="900089303";
+var U_ALT_TEGEL="900089301";
+
+var departures=[];
+
+function $(id){
+  return document.getElementById(id);
+}
+
+
+/* =========================
+   DEPARTURE TIME
+   ========================= */
+
+function dep(x){
+  return x.when || x.plannedWhen;
+}
+
+function isFuture(x){
+
+  var t=dep(x);
+
+  if(!t){
+    return false;
+  }
+
+  return new Date(t).getTime() >= new Date().getTime()-30000;
+}
+
+function minutes(x){
+
+  var t=dep(x);
+
+  if(!t){
+    return 999;
+  }
+
+  var diff=
+    (new Date(t).getTime()-new Date().getTime())/60000;
+
+  return Math.max(0,Math.round(diff));
+}
+
+function sortByTime(a,b){
+  return new Date(dep(a)).getTime() -
+         new Date(dep(b)).getTime();
+}
+
+
+/* =========================
+   S25
+   ========================= */
+
+function s25(x){
+
+  if(!x.line){
+    return false;
+  }
+
+  if(x.line.name!=="S25"){
+    return false;
+  }
+
+  return /teltow\s*stadt/i.test(x.direction || "");
+}
+
+
+/* =========================
+   REPLACEMENT BUS
+   ========================= */
+
+function replacementBus(x){
+
+  var direction=(x.direction || "").toLowerCase();
+
+  var name="";
+
+  if(x.line && x.line.name){
+    name=x.line.name.toLowerCase();
+  }
+
+  var product="";
+
+  if(x.line && x.line.product){
+    product=x.line.product.toLowerCase();
+  }
+
+  if(!/kurt[-\s]?schumacher[-\s]?platz/.test(direction)){
+    return false;
+  }
+
+  return(
+    product==="bus" ||
+    name.indexOf("u6")>=0 ||
+    name.indexOf("ersatz")>=0 ||
+    name.indexOf("bus")>=0
+  );
+}
+
+
+/* =========================
+   CLOCK
+   ========================= */
+
+function updateClock(){
+
+  var d=new Date();
+
+  var h=("0"+d.getHours()).slice(-2);
+  var m=("0"+d.getMinutes()).slice(-2);
+  var s=("0"+d.getSeconds()).slice(-2);
+
+  $("clock").innerHTML=h+":"+m+":"+s;
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+
+/* =========================
+   WEATHER
+   ========================= */
+
+function updateWeather(){
+
   var x=new XMLHttpRequest();
 
-  x.open("GET",dataUrl+"?t="+new Date().getTime(),true);
+  x.open(
+    "GET",
+    "https://api.open-meteo.com/v1/forecast?latitude=52.56&longitude=13.29&current=temperature_2m,weather_code&timezone=Europe%2FBerlin&t="+new Date().getTime(),
+    true
+  );
 
   x.onreadystatechange=function(){
-    if(x.readyState===4){
-      if(x.status===200){
-        try{
-          var d=JSON.parse(x.responseText);
-          showData(d);
-        }catch(e){
-          showError();
-        }
-      }else{
-        showError();
-      }
+
+    if(x.readyState!==4){
+      return;
     }
+
+    if(x.status===200){
+
+      try{
+
+        var d=JSON.parse(x.responseText);
+
+        var t=Math.round(
+          d.current.temperature_2m
+        );
+
+        $("weather").innerHTML=t+"°C";
+
+      }catch(e){
+
+        $("weather").innerHTML="--°C";
+
+      }
+
+    }else{
+
+      $("weather").innerHTML="--°C";
+
+    }
+
   };
 
   x.send(null);
 }
 
-function showData(d){
-  var rows=document.getElementById("rows");
-  var list=d.departures||[];
+updateWeather();
+setInterval(updateWeather,600000);
+
+
+/* =========================
+   QUOTES
+   ========================= */
+
+var quotes=[
+  "„Jeder Weg beginnt mit dem ersten Schritt.“",
+  "„Der nächste Schritt bringt dich weiter.“",
+  "„Neue Wege, neue Möglichkeiten.“",
+  "„Manchmal ist der Weg das Ziel.“",
+  "„Heute ist ein guter Tag für einen neuen Weg.“",
+  "„Gute Reise!“"
+];
+
+function updateQuote(){
+
+  var day=Math.floor(
+    new Date().getTime()/86400000
+  );
+
+  $("quote").innerHTML=
+    quotes[day%quotes.length];
+}
+
+updateQuote();
+
+
+/* =========================
+   DISPLAY ROW
+   ========================= */
+
+function rowHTML(x){
+
+  var m=minutes(x);
+
+  var isBus=x.kind==="bus";
+
+  var line=isBus ? "U6" : "S25";
+
+  var destination=isBus
+    ? "KURT-SCHUMACHER-PLATZ"
+    : "TELTOW STADT";
+
+  var countdown=
+    m<=0 ? "JETZT" : m+" min";
+
+  return(
+    '<div class="row">'+
+      '<div class="line">'+
+        '<span class="badge">'+line+'</span>'+
+      '</div>'+
+      '<div class="dest">'+destination+'</div>'+
+      '<div class="count">'+countdown+'</div>'+
+    '</div>'
+  );
+}
+
+
+/* =========================
+   RENDER
+   ========================= */
+
+function render(){
+
+  var list=[];
+
+  var i;
+
+  for(i=0;i<departures.length;i++){
+
+    if(isFuture(departures[i])){
+      list.push(departures[i]);
+    }
+
+  }
+
+  list.sort(sortByTime);
+
+  list=list.slice(0,7);
 
   if(list.length===0){
-    showError();
+
+    $("rows").innerHTML=
+      '<div class="message">KEINE ABFAHRTEN VERFÜGBAR</div>';
+
     return;
   }
 
   var html="";
 
-  for(var i=0;i<5;i++){
-    if(list[i]){
-      html+='<div class="row">';
-      html+='<div>'+list[i].line+'</div>';
-      html+='<div>'+list[i].destination+'</div>';
-var departureTime = new Date(list[i].time).getTime();
-var now = new Date().getTime();
-var minutes = Math.floor((departureTime - now) / 60000);
+  for(i=0;i<list.length;i++){
+    html+=rowHTML(list[i]);
+  }
 
-var countdown;
-
-if(minutes <= 0){
-  countdown = "JETZT";
-}else{
-  countdown = minutes + " MIN";
+  $("rows").innerHTML=html;
 }
 
-html+='<div class="count">'+countdown+'</div>';
-      html+='</div>';
-    }else{
-      html+='<div class="row"><div></div><div></div><div></div></div>';
+
+/* =========================
+   LOAD VBB STOP
+   ========================= */
+
+function get(id,callback){
+
+  var x=new XMLHttpRequest();
+
+  var url=
+    API+
+    "/stops/"+
+    id+
+    "/departures?duration=90&results=50&remarks=true&language=de";
+
+  x.open("GET",url,true);
+
+  x.onreadystatechange=function(){
+
+    if(x.readyState!==4){
+      return;
     }
-  }
 
-  rows.innerHTML=html;
+    if(x.status===200){
 
-  if(d.temperature !== null && d.temperature !== undefined){
-    document.getElementById("weather").innerHTML=d.temperature+"°C";
-  }
+      try{
+
+        var d=JSON.parse(x.responseText);
+
+        callback(null,d.departures || []);
+
+      }catch(e){
+
+        callback(e,null);
+
+      }
+
+    }else{
+
+      callback(new Error(x.status),null);
+
+    }
+
+  };
+
+  x.send(null);
 }
 
-function showError(){
-  document.getElementById("rows").innerHTML=
-  '<div class="row"><div></div><div>LIVE-DATEN NICHT VERFÜGBAR</div><div></div></div>';
+
+/* =========================
+   REFRESH DATA
+   ========================= */
+
+function refresh(){
+
+  get(S_TEGEL,function(error1,s){
+
+    if(error1){
+
+      if(departures.length===0){
+        $("rows").innerHTML=
+          '<div class="message">LIVE-DATEN NICHT ERREICHBAR</div>';
+      }
+
+      return;
+    }
+
+    get(U_ALT_TEGEL,function(error2,b){
+
+      if(error2){
+
+        if(departures.length===0){
+          $("rows").innerHTML=
+            '<div class="message">LIVE-DATEN NICHT ERREICHBAR</div>';
+        }
+
+        return;
+      }
+
+      var result=[];
+      var i;
+
+      /* S25 */
+
+      for(i=0;i<s.length;i++){
+
+        if(s25(s[i])){
+
+          s[i].kind="s25";
+          result.push(s[i]);
+
+        }
+
+      }
+
+      /* Replacement bus */
+
+      for(i=0;i<b.length;i++){
+
+        if(replacementBus(b[i])){
+
+          b[i].kind="bus";
+          result.push(b[i]);
+
+        }
+
+      }
+
+      result.sort(sortByTime);
+
+      departures=result;
+
+      render();
+
+    });
+
+  });
+
 }
 
-function clock(){
-  var d=new Date();
 
-  var h=("0"+d.getHours()).slice(-2);
-  var m=("0"+d.getMinutes()).slice(-2);
+/* =========================
+   START
+   ========================= */
 
-  document.getElementById("clock").innerHTML=h+":"+m;
-}
+refresh();
 
-function fullscreen(){
+setInterval(refresh,20000);
+setInterval(render,1000);
+
+
+/* =========================
+   FULLSCREEN
+   ========================= */
+
+$("fs").onclick=function(){
+
   var e=document.documentElement;
 
-  if(e.requestFullscreen){
-    e.requestFullscreen();
-  }else if(e.webkitRequestFullscreen){
-    e.webkitRequestFullscreen();
-  }
-}
+  try{
 
-document.getElementById("fs").onclick=fullscreen;
+    if(e.requestFullscreen){
+      e.requestFullscreen();
+    }else if(e.webkitRequestFullscreen){
+      e.webkitRequestFullscreen();
+    }
 
-clock();
-setInterval(clock,1000);
+  }catch(err){}
 
-loadData();
-setInterval(loadData,60000);
+};
+
 </script>
 
 </body>
