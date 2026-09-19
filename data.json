@@ -1,17 +1,7 @@
 {
-  "updated": "2026-09-19T22:57:31.954108+00:00",
-  "temperature": 17.9,
+  "updated": "2026-09-19T23:14:34.221768+00:00",
+  "temperature": 17.8,
   "departures": [
-    {
-      "time": "2026-09-20T01:10:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-20T01:13:00+02:00",
-      "line": "S25",
-      "destination": "TELTOW STADT"
-    },
     {
       "time": "2026-09-20T01:25:00+02:00",
       "line": "U6",
@@ -91,6 +81,16 @@
       "time": "2026-09-20T03:55:00+02:00",
       "line": "U6",
       "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-20T04:10:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-20T04:13:00+02:00",
+      "line": "S25",
+      "destination": "TELTOW STADT"
     }
   ]
 }
