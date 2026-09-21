@@ -1,9 +1,19 @@
 {
-  "updated": "2026-09-21T22:52:48.134600+00:00",
-  "temperature": 12.8,
+  "updated": "2026-09-21T23:07:22.598855+00:00",
+  "temperature": 12.7,
   "departures": [
     {
       "time": "2026-09-22T03:43:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-22T03:53:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-22T04:03:00+02:00",
       "line": "U6",
       "destination": "KURT-SCHUMACHER-PLATZ"
     }
