@@ -1,32 +1,7 @@
 {
-  "updated": "2026-09-21T02:47:27.492284+00:00",
+  "updated": "2026-09-21T02:58:57.179941+00:00",
   "temperature": 12.7,
   "departures": [
-    {
-      "time": "2026-09-21T04:49:00+02:00",
-      "line": "S25",
-      "destination": "TELTOW STADT"
-    },
-    {
-      "time": "2026-09-21T04:50:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-21T04:51:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-21T04:53:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-21T04:58:00+02:00",
-      "line": "S25",
-      "destination": "TELTOW STADT"
-    },
     {
       "time": "2026-09-21T05:00:00+02:00",
       "line": "U6",
@@ -36,6 +11,11 @@
       "time": "2026-09-21T05:01:00+02:00",
       "line": "U6",
       "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-21T05:03:00+02:00",
+      "line": "S25",
+      "destination": "TELTOW STADT"
     },
     {
       "time": "2026-09-21T05:03:00+02:00",
@@ -58,7 +38,7 @@
       "destination": "KURT-SCHUMACHER-PLATZ"
     },
     {
-      "time": "2026-09-21T05:18:00+02:00",
+      "time": "2026-09-21T05:19:00+02:00",
       "line": "S25",
       "destination": "TELTOW STADT"
     },
@@ -101,6 +81,26 @@
       "time": "2026-09-21T05:38:00+02:00",
       "line": "S25",
       "destination": "TELTOW STADT"
+    },
+    {
+      "time": "2026-09-21T05:39:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-21T05:40:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-21T05:43:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-21T05:45:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
     }
   ]
 }
