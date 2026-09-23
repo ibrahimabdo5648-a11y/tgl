@@ -1,52 +1,7 @@
 {
-  "updated": "2026-09-23T13:19:46.416717+00:00",
-  "temperature": 19.3,
+  "updated": "2026-09-23T13:35:25.773992+00:00",
+  "temperature": 19.4,
   "departures": [
-    {
-      "time": "2026-09-23T15:20:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:23:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:25:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:28:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:28:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:30:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:33:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:33:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
-    {
-      "time": "2026-09-23T15:35:00+02:00",
-      "line": "U6",
-      "destination": "KURT-SCHUMACHER-PLATZ"
-    },
     {
       "time": "2026-09-23T15:38:00+02:00",
       "line": "S25",
@@ -101,6 +56,51 @@
       "time": "2026-09-23T15:58:00+02:00",
       "line": "S25",
       "destination": "TELTOW STADT"
+    },
+    {
+      "time": "2026-09-23T15:58:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:00:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:03:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:05:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:08:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:08:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:10:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:13:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
+    },
+    {
+      "time": "2026-09-23T16:15:00+02:00",
+      "line": "U6",
+      "destination": "KURT-SCHUMACHER-PLATZ"
     }
   ]
 }
